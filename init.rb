@@ -2,7 +2,7 @@ require 'redmine'
 
 require 'dispatcher'
 
-Dispatcher.to_prepare :redmine_polls do
+Dispatcher.to_prepare :redmine_track_control do
   require_dependency 'tracker'
   Tracker.send(:include, TrackerPatch) unless Issue.included_modules.include? TrackerPatch
 end
