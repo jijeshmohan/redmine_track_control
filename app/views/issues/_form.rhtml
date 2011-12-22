@@ -6,7 +6,7 @@
   <label class="inline" for="issue_is_private"><%= f.check_box :is_private, :no_label => true %> <%= l(:field_is_private) %></label>
 </p>
 <% end %>
-<p><%= f.select :tracker_id, @project.trackers.reject{|t| User.current.allowed_to?("view_#{t.name}_polls".to_sym, @project, :global => true).nil?}.collect {|t| [t.name, t.id]}, :required => true %></p>
+<p><%= f.select :tracker_id, @project.trackers.reject{|t| User.current.allowed_to?("create_#{t.name}_tracker".to_sym, @project, :global => true).nil?}.collect {|t| [t.name, t.id]}, :required => true %></p>
 <%= observe_field :issue_tracker_id, :url => { :action => :new, :project_id => @project, :id => @issue },
                                      :update => :attributes,
                                      :with => "Form.serialize('issue-form')" %>
