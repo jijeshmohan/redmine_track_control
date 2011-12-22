@@ -1,3 +1,7 @@
-= track_control
+= Redmine Tracker Control plugin
 
-Description goes here
+Plugin for controlling tracker wise issue creation
+
+
+
+
