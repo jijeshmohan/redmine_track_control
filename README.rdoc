@@ -8,6 +8,13 @@ Plugin for controlling tracker wise issue creation
 * Project Module to enable/disable tracker permission
 * Projects which are not enabled tracker control module , will work normally
 
+*Installation*
+
+Copy redmine_track_control directory to #{RAILS_ROOT}/vendor/plugins
+Restart Redmine
+Configure access control in the roles page
+Add _Tracker Permission_ module in the project
+
 
 
 
