@@ -7,6 +7,7 @@ module RolePatch
 
       def permissions
         read_attribute(:permissions) || []
+        return self[:permissions] unless self[:permissions]
         self[:permissions].map! do |p|
           if p.instance_of? String
             p.split('').slice(1..-1).join.to_sym
