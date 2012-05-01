@@ -3,7 +3,7 @@ module  IssuePatch
     base.send(:include, InstanceMethods)
     base.class_eval do
           unloadable
-          validate :is_valid_tracker, :on => :create
+          validate_on_create :is_valid_tracker
     end
   end
 
