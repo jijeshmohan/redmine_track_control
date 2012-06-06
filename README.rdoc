@@ -10,10 +10,10 @@ Plugin for controlling tracker wise issue creation
 
 *Installation*
 
-* Copy redmine_track_control directory to #{RAILS_ROOT}/vendor/plugins
+* Copy redmine_track_control directory to #{RAILS_ROOT}/plugins
 * Restart Redmine
 * Configure access control in the roles page
-* Add _Tracker Permission_ module in the project
+* Add _Tracker Permission_ module in the project settings -> modules
 
 
 
