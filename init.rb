@@ -1,7 +1,6 @@
 require 'redmine'
-require 'dispatcher'
 
-Dispatcher.to_prepare :redmine_track_control do
+ActionDispatch::Callbacks.to_prepare do
   require_dependency 'tracker'
   Tracker.send(:include, TrackerPatch) unless Issue.included_modules.include? TrackerPatch
 
@@ -19,7 +18,7 @@ Redmine::Plugin.register :redmine_track_control do
   name 'Redmine Tracker Control plugin'
   author 'Jijesh Mohan'
   description 'Plugin for controlling tracker wise issue creation'
-  version '1.0.4'
+  version '1.0.5'
   url 'https://github.com/jijeshmohan/redmine_track_control'
   author_url 'jijeshmohan.wordpress.com'
 
