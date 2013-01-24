@@ -24,7 +24,7 @@ Redmine::Plugin.register :redmine_track_control do
 
   project_module :tracker_permissions do
     Tracker.all.each do |t|
-      permission "create_#{t.name.downcase}_tracker".to_sym, {:issues => :index}
+      permission "create_#{t.name.downcase.gsub(/\ +/,'_')}_tracker".to_sym, {:issues => :index}
     end
   end
 end
