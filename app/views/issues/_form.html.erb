@@ -14,6 +14,31 @@
 
 <% if @issue.safe_attribute? 'tracker_id' %>
 <p><%= display_tracker_select(@project,@issue,f)%></p>
+
+<% if @issue.new_record? %>
+<!-- trigger for form reload -->
+<script>
+$(function() {
+  //validate whether there is a valid tracker available
+  if($('#issue_tracker_id > option').length == 0) {
+    alert("You are NOT allow to create any issue, please contact to system admin!");
+    var currentPath = window.location.pathname;
+    var backToPath = currentPath.substring(0, currentPath.lastIndexOf("/"));
+    location.href=backToPath;
+    //history.go(-1);
+  }
+
+  //reload the form with the valid default tracker_id
+  var default_backend_tracker_id = "<%= @issue.tracker_id %>";
+  var default_online_tracker_id = $("#issue_tracker_id").val();
+  if (default_backend_tracker_id != default_online_tracker_id) {
+    $("#issue_tracker_id").val(default_online_tracker_id);
+    $("#issue_tracker_id").change();
+  }
+});
+</script>
+<% end %>
+
 <% end %>
 
 <% if @issue.safe_attribute? 'subject' %>
