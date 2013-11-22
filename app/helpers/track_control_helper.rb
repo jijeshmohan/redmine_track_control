@@ -4,7 +4,7 @@
          tracker_list=project.trackers.select{|t| User.current.allowed_to?("create_#{t.name.downcase.gsub(/\ +/,'_')}_tracker".to_sym, project, :global => true)}.collect {|t| [t.name, t.id]}
         unless issue.new_record?
           current_tracker = [issue.tracker.name,issue.tracker.id]
-          tracker_list << current_tracker unless current_tracker.include? current_tracker
+          tracker_list << current_tracker unless tracker_list.include? current_tracker
         end
       else
         tracker_list = project.trackers.collect {|t| [t.name, t.id]}
