@@ -16,6 +16,7 @@ module RedmineTrackControl
       def build_new_issue_from_params_with_tracker_control
         build_new_issue_from_params_without_tracker_control
         return true if @issue.project.enabled_modules.where(:name => "tracker_permissions").count == 0
+        return true if User.current.admin?
         if !User.current.allowed_to?("create_tracker#{@issue.tracker.id}".to_sym, @issue.project, :global => true)
           render_error l(:error_no_tracker_in_project)
           return false
@@ -23,8 +24,10 @@ module RedmineTrackControl
       end
 
       def update_issue_from_params_with_tracker_control
+        old_tracker_id = @issue.tracker.id
         update_issue_from_params_without_tracker_control
-        return true if (@issue.project.enabled_modules.where(:name => "tracker_permissions").count == 0) or (params[:tracker_id].blank?) or (@issue.tracker.id == params[:tracker_id])
+        return true if (@issue.project.enabled_modules.where(:name => "tracker_permissions").count == 0) or (params[:tracker_id].blank?) or (old_tracker_id == params[:tracker_id])
+        return true if User.current.admin?
         if !User.current.allowed_to?("create_tracker#{@issue.tracker.id}".to_sym, @issue.project, :global => true)
           render_error l(:error_no_tracker_in_project)
           return false
