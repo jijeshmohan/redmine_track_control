@@ -10,8 +10,11 @@ ActionDispatch::Callbacks.to_prepare do
   require_dependency 'issue'
   Issue.send(:include, RedmineTrackControl::IssuePatch)
 
+  require_dependency 'roles_controller'
+  RolesController.send(:include, RedmineTrackControl::RolesControllerPatch)
+
   require_dependency 'issues_controller'
-  RedmineTrackControl::IssuesControllerPatch.perform
+  IssuesController.send(:include, RedmineTrackControl::IssuesControllerPatch)
 end
 
 Redmine::Plugin.register :redmine_track_control do
@@ -24,7 +27,7 @@ Redmine::Plugin.register :redmine_track_control do
 
   project_module :tracker_permissions do
     Tracker.all.each do |t|
-      permission "create_#{t.name.downcase.gsub(/\ +/,'_')}_tracker".to_sym, {:issues => :index}
+      permission "create_tracker#{t.id}".to_sym, {:issues => :index}
     end
   end
 end
