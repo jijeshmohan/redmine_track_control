@@ -15,12 +15,20 @@ module RedmineTrackControl
     module InstanceMethods
       def build_new_issue_from_params_with_tracker_control
         build_new_issue_from_params_without_tracker_control
-        return false if !User.current.allowed_to?("create_tracker#{@issue.tracker.id}".to_sym, @issue.project, :global => true)
+        return true if @issue.project.enabled_modules.where(:name => "tracker_permissions").count == 0
+        if !User.current.allowed_to?("create_tracker#{@issue.tracker.id}".to_sym, @issue.project, :global => true)
+          render_error l(:error_no_tracker_in_project)
+          return false
+        end
       end
 
       def update_issue_from_params_with_tracker_control
         update_issue_from_params_without_tracker_control
-        return false if !User.current.allowed_to?("create_tracker#{@issue.tracker.id}".to_sym, @issue.project, :global => true)
+        return true if (@issue.project.enabled_modules.where(:name => "tracker_permissions").count == 0) or (params[:tracker_id].blank?) or (@issue.tracker.id == params[:tracker_id])
+        if !User.current.allowed_to?("create_tracker#{@issue.tracker.id}".to_sym, @issue.project, :global => true)
+          render_error l(:error_no_tracker_in_project)
+          return false
+        end
       end
     end
   end
