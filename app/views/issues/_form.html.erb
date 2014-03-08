@@ -16,27 +16,7 @@
 <p><%= display_tracker_select(@project,@issue,f)%></p>
 
 <% if @issue.new_record? %>
-<!-- trigger for form reload -->
-<script>
-$(function() {
-  //validate whether there is a valid tracker available
-  if($('#issue_tracker_id > option').length == 0) {
-    alert("You are NOT allow to create any issue, please contact to system admin!");
-    var currentPath = window.location.pathname;
-    var backToPath = currentPath.substring(0, currentPath.lastIndexOf("/"));
-    location.href=backToPath;
-    //history.go(-1);
-  }
-
-  //reload the form with the valid default tracker_id
-  var default_backend_tracker_id = "<%= @issue.tracker_id %>";
-  var default_online_tracker_id = $("#issue_tracker_id").val();
-  if (default_backend_tracker_id != default_online_tracker_id) {
-    $("#issue_tracker_id").val(default_online_tracker_id);
-    $("#issue_tracker_id").change();
-  }
-});
-</script>
+  <% if valid_trackers_list(@issue.project).empty? then flash[:error] = l(:notice_no_valid_trackers_available); end %>
 <% end %>
 
 <% end %>
@@ -50,7 +30,7 @@ $(function() {
   <%= f.label_for_field :description, :required => @issue.required_attribute?('description') %>
   <%= link_to_function image_tag('edit.png'), '$(this).hide(); $("#issue_description_and_toolbar").show()' unless @issue.new_record? %>
   <%= content_tag 'span', :id => "issue_description_and_toolbar", :style => (@issue.new_record? ? nil : 'display:none') do %>
-    <%= f.text_area :description,
+  <%= f.text_area :description,
                    :cols => 60,
                    :rows => (@issue.description.blank? ? 10 : [[10, @issue.description.length / 50].max, 100].min),
                    :accesskey => accesskey(:edit),

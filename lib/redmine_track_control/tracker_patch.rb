@@ -19,10 +19,10 @@ module RedmineTrackControl
     module InstanceMethods
       private
       def add_tracker_permission
-        Redmine::AccessControl.map {|map| map.project_module(:tracker_permissions) {|map|map.permission("create_#{name.downcase.gsub(/\ +/,'_')}_tracker".to_sym, {:issues => :index}, {})}}
+        Redmine::AccessControl.map {|map| map.project_module(:tracker_permissions) {|map|map.permission("create_tracker#{id}".to_sym, {:issues => :index}, {})}}
       end
       def remove_tracker_permission
-        perm = Redmine::AccessControl.permission("create_#{name.downcase.gsub(/\ +/,'_')}_tracker".to_sym)
+        perm = Redmine::AccessControl.permission("create_tracker#{id}".to_sym)
         Redmine::AccessControl.permissions.delete perm unless perm.nil?
       end
     end

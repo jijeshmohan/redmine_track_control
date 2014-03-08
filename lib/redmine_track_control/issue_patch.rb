@@ -11,8 +11,8 @@ module RedmineTrackControl
     module InstanceMethods
       private
         def is_valid_tracker
-          tracker_name = "create_#{self.tracker.name.downcase.gsub(/\ +/,'_')}_tracker".to_sym
-          errors.add(:tracker_id,"not allowed") if User.current.allowed_to?(tracker_name, self.project, :global => true).nil?
+          tracker_permission_flag = "create_tracker#{self.tracker.id}".to_sym
+          errors.add(:tracker_id, :invalid) if !User.current.allowed_to?(tracker_permission_flag, self.project, :global => true)
         end
     end
   end

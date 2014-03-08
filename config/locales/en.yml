@@ -1,3 +1,5 @@
 # English strings go here for Rails i18n
 en:
-  my_label: "My label"
+  trackcontrol_create_tracker: "Create %{value} tracker"
+  notice_no_valid_trackers_available: "No valid trackers available. Please ask a Redmine administrator for assistance."
+  trackcontrol_tracker_not_allowed: "not allowed"
