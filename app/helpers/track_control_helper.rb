@@ -1,7 +1,9 @@
+require 'redmine_track_control/tracker_helper'
+
 module TrackControlHelper
   def valid_trackers_list(project)
     return project.trackers.collect {|t| [t.name, t.id]} if project.enabled_modules.where(:name => "tracker_permissions").count == 0
-    project.trackers.select{|t| User.current.allowed_to?("create_tracker#{t.id}".to_sym, project, :global => true)}.collect {|t| [t.name, t.id]}
+    project.trackers.select{|t| User.current.allowed_to?(RedmineTrackControl::TrackerHelper.permission(t), project, :global => true)}.collect {|t| [t.name, t.id]}
   end
 
   def display_tracker_select(project,issue,f)

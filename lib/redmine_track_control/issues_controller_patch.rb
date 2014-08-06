@@ -1,3 +1,5 @@
+require 'redmine_track_control/tracker_helper'
+
 module RedmineTrackControl
   module IssuesControllerPatch
     def self.included(base)
@@ -16,8 +18,9 @@ module RedmineTrackControl
       def build_new_issue_from_params_with_tracker_control
         build_new_issue_from_params_without_tracker_control
         return if @project.enabled_modules.where(:name => "tracker_permissions").count == 0
-        return if params[:id].blank? and @project.trackers.any? { |t| User.current.allowed_to?("create_tracker#{t.id}".to_sym, @issue.project, :global => true) }
-        if !User.current.allowed_to?("create_tracker#{@issue.tracker.id}".to_sym, @issue.project, :global => true)
+        return if params[:id].blank? and @project.trackers.any? { |t| User.current.allowed_to?(RedmineTrackControl::TrackerHelper.permission(t), @issue.project, :global => true) }
+        permission = RedmineTrackControl::TrackerHelper.permission(@issue.tracker)
+        if !User.current.allowed_to?(permission, @issue.project, :global => true)
           return if User.current.admin? # Even if not allowed, admin goes through
           render_error l(:error_no_tracker_in_project)
           return false
@@ -29,7 +32,8 @@ module RedmineTrackControl
         update_issue_from_params_without_tracker_control
         return true if (@issue.project.enabled_modules.where(:name => "tracker_permissions").count == 0) or (params[:tracker_id].blank?) or (old_tracker_id == params[:tracker_id])
         return true if User.current.admin?
-        if !User.current.allowed_to?("create_tracker#{@issue.tracker.id}".to_sym, @issue.project, :global => true)
+        permission = RedmineTrackControl::TrackerHelper.permission(@issue.tracker)
+        if !User.current.allowed_to?(permission, @issue.project, :global => true)
           render_error l(:error_no_tracker_in_project)
           return false
         end
