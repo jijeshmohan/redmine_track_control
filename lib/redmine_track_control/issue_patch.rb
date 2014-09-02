@@ -12,10 +12,17 @@ module RedmineTrackControl
 
     module InstanceMethods
       private
-        def is_tracker_valid
-          return true if project.enabled_modules.where(:name => "tracker_permissions").count == 0
-          tracker_permission = RedmineTrackControl::TrackerHelper.permission(self.tracker)
-          errors.add(:tracker_id, :invalid) if !User.current.allowed_to?(tracker_permission, self.project, :global => true)
+         def valid_trackers_list(project)  #Added for check whether user having a valid tracker for the project
+          if project.enabled_modules.where(:name => "tracker_permissions").count == 1
+            project.trackers.select{|t| User.current.allowed_to?("create_tracker#{t.id}".to_sym, project, :global => true)}.collect {|t| [t.name, t.id]}
+          else
+            project.trackers.collect {|t| [t.name, t.id]}
+          end
+        end
+
+        def is_valid_tracker
+          tracker_permission_flag = "create_tracker#{self.tracker.id}".to_sym
+          errors.add(:tracker_id, :invalid) if valid_trackers_list(self.project).empty?
         end
     end
   end
