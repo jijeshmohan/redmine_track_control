@@ -15,19 +15,11 @@ module RedmineTrackControl
     end
 
     module InstanceMethods
-      def valid_trackers_list(project)  #Added for check whether user having a valid tracker for the project
-        if project.enabled_modules.where(:name => "tracker_permissions").count == 1
-          project.trackers.select{|t| User.current.allowed_to?("create_tracker#{t.id}".to_sym, project, :global => true)}.collect {|t| [t.name, t.id]}
-        else
-          project.trackers.collect {|t| [t.name, t.id]}
-        end
-      end
-
       def build_new_issue_from_params_with_tracker_control
         build_new_issue_from_params_without_tracker_control
         return true if @issue.project.enabled_modules.where(:name => "tracker_permissions").count == 0
         return true if User.current.admin?
-        if valid_trackers_list(@issue.project).empty?  
+        if RedmineTrackControl::TrackerHelper.valid_trackers_list(@issue.project).empty?  
           render_error l(:error_no_tracker_in_project)
           return false
         end
@@ -38,7 +30,7 @@ module RedmineTrackControl
         update_issue_from_params_without_tracker_control
         return true if (@issue.project.enabled_modules.where(:name => "tracker_permissions").count == 0) or (params[:tracker_id].blank?) or (old_tracker_id == params[:tracker_id])
         return true if User.current.admin?
-        if valid_trackers_list(@issue.project).empty?  
+        if RedmineTrackControl::TrackerHelper.valid_trackers_list(@issue.project).empty?  
           render_error l(:error_no_tracker_in_project)
           return false
         end

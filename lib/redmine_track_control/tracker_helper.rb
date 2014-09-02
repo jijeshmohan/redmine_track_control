@@ -1,4 +1,4 @@
-#Patches Redmine's Tracker. Adds callback to manipulate permission
+# Helper module
 module RedmineTrackControl
   module TrackerHelper
     def self.add_tracker_permission(tracker)
@@ -12,6 +12,15 @@ module RedmineTrackControl
 
     def self.permission(tracker)
       "create_tracker#{tracker.id}".to_sym
+    end
+
+    # Gets the list of valid trackers for the project for the current user
+    def self.valid_trackers_list(project)
+      if project.enabled_modules.where(:name => "tracker_permissions").count == 1
+        project.trackers.select{|t| User.current.allowed_to?(permission(t), project, :global => true)}.collect {|t| [t.name, t.id]}
+      else
+        project.trackers.collect {|t| [t.name, t.id]}
+      end
     end
   end
 end
