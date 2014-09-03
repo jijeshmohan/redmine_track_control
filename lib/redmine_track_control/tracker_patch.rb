@@ -1,6 +1,8 @@
 #Patches Redmine's Tracker. Adds callback to manipulate permission
+require 'redmine_track_control/tracker_helper'
+
 module RedmineTrackControl
-  module  TrackerPatch
+  module TrackerPatch
     def self.included(base)
       base.extend(ClassMethods)
       base.send(:include, InstanceMethods)
@@ -19,11 +21,10 @@ module RedmineTrackControl
     module InstanceMethods
       private
       def add_tracker_permission
-        Redmine::AccessControl.map {|map| map.project_module(:tracker_permissions) {|map|map.permission("create_tracker#{id}".to_sym, {:issues => :index}, {})}}
+        RedmineTrackControl::TrackerHelper.add_tracker_permission(self)
       end
       def remove_tracker_permission
-        perm = Redmine::AccessControl.permission("create_tracker#{id}".to_sym)
-        Redmine::AccessControl.permissions.delete perm unless perm.nil?
+        RedmineTrackControl::TrackerHelper.remove_tracker_permission(self)
       end
     end
   end

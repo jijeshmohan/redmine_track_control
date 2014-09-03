@@ -1,30 +1,23 @@
 #Patches Redmine's RolesController.
+require 'redmine_track_control/tracker_helper'
+
 module RedmineTrackControl
   module RolesControllerPatch
     def self.included(base)
       base.send(:include, InstanceMethods)
-
+      
       base.class_eval do
         unloadable
-
-        alias_method_chain :show, :tracker_translations
-        alias_method_chain :permissions, :tracker_translations
+        before_filter :store_translations
       end
     end
 
     module InstanceMethods
-      def show_with_tracker_translations
+      def store_translations
         Tracker.all.each do |t|
-          I18n.backend.store_translations(:en, { "permission_create_tracker#{t.id}".to_sym => l(:trackcontrol_create_tracker, t.name) })
+          permission_key = ("permission_" + RedmineTrackControl::TrackerHelper.permission(t).to_s).to_sym
+          I18n.backend.store_translations(:en, { permission_key => l(:trackcontrol_create_tracker, t.name) })
         end
-        show_without_tracker_translations
-      end
-
-      def permissions_with_tracker_translations
-        Tracker.all.each do |t|
-          I18n.backend.store_translations(:en, { "permission_create_tracker#{t.id}".to_sym => l(:trackcontrol_create_tracker, t.name) })
-        end
-        permissions_without_tracker_translations
       end
     end
   end

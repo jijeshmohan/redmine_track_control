@@ -1,11 +1,9 @@
 require 'redmine'
+require 'redmine_track_control/tracker_helper'
 
 ActionDispatch::Callbacks.to_prepare do
   require_dependency 'tracker'
   Tracker.send(:include, RedmineTrackControl::TrackerPatch)
-
-  require_dependency 'role'
-  Role.send(:include, RedmineTrackControl::RolePatch)
 
   require_dependency 'issue'
   Issue.send(:include, RedmineTrackControl::IssuePatch)
@@ -27,7 +25,7 @@ Redmine::Plugin.register :redmine_track_control do
 
   project_module :tracker_permissions do
     Tracker.all.each do |t|
-      permission "create_tracker#{t.id}".to_sym, {:issues => :index}
+      RedmineTrackControl::TrackerHelper.add_tracker_permission(t)
     end
   end
 end
