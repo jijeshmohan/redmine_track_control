@@ -13,6 +13,9 @@ ActionDispatch::Callbacks.to_prepare do
 
   require_dependency 'issues_controller'
   IssuesController.send(:include, RedmineTrackControl::IssuesControllerPatch)
+  
+  require_dependency 'issue_query'
+  IssueQuery.send(:include, RedmineTrackControl::IssueQueryPatch)
 end
 
 Redmine::Plugin.register :redmine_track_control do
