@@ -13,13 +13,16 @@ ActionDispatch::Callbacks.to_prepare do
 
   require_dependency 'issues_controller'
   IssuesController.send(:include, RedmineTrackControl::IssuesControllerPatch)
+  
+  require_dependency 'issue_query'
+  IssueQuery.send(:include, RedmineTrackControl::IssueQueryPatch)
 end
 
 Redmine::Plugin.register :redmine_track_control do
   name 'Redmine Tracker Control plugin'
   author 'Jijesh Mohan'
   description 'Plugin for controlling tracker wise issue creation'
-  version '1.0.9'
+  version '1.1.0'
   url 'https://github.com/jijeshmohan/redmine_track_control'
   author_url 'jijeshmohan.wordpress.com'
 

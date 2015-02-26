@@ -14,7 +14,3 @@ Plugin for controlling tracker wise issue creation
 * Restart Redmine
 * Configure access control in the roles page
 * Add _Tracker Permission_ module in the project settings -> modules
-
-
-
-
