@@ -16,7 +16,7 @@ module RedmineTrackControl
     module InstanceMethods
       def available_filters_with_trackcontrol
         @available_filters = available_filters_without_trackcontrol
-        delete_available_filters "tracker_id"
+        delete_available_filter "tracker_id"
         add_available_filter "tracker_id",
         :type => :list, :name => "Tracker", :values => RedmineTrackControl::TrackerHelper.valid_trackers_list(self.project)
         @available_filters
