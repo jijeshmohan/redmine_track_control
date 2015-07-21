@@ -7,18 +7,17 @@
 </p>
 <% end %>
 
-<% if @issue.safe_attribute? 'project_id' %>
+<% if @issue.safe_attribute?('project_id') && (!@issue.new_record? || @project.nil? || @issue.copy?) %>
 <p><%= f.select :project_id, project_tree_options_for_select(@issue.allowed_target_projects, :selected => @issue.project), {:required => true},
-                :onchange => "updateIssueFrom('#{escape_javascript project_issue_form_path(@project, :id => @issue, :format => 'js')}')" %></p>
+                :onchange => "updateIssueFrom('#{escape_javascript update_issue_form_path(@project, @issue)}')" %></p>
 <% end %>
 
 <% if @issue.safe_attribute? 'tracker_id' %>
-<p><%= display_tracker_select(@project,@issue,f)%></p>
+  <p><%= display_tracker_select(@project,@issue,f)%></p>
 
-<% if @issue.new_record? %>
-  <% if valid_trackers_list(@issue.project).empty? then flash[:error] = l(:notice_no_valid_trackers_available); end %>
-<% end %>
-
+  <% if @issue.new_record? %>
+    <% if valid_trackers_list(@issue.project).empty? then flash[:error] = l(:notice_no_valid_trackers_available); end %>
+  <% end %>
 <% end %>
 
 <% if @issue.safe_attribute? 'subject' %>
@@ -30,7 +29,7 @@
   <%= f.label_for_field :description, :required => @issue.required_attribute?('description') %>
   <%= link_to_function image_tag('edit.png'), '$(this).hide(); $("#issue_description_and_toolbar").show()' unless @issue.new_record? %>
   <%= content_tag 'span', :id => "issue_description_and_toolbar", :style => (@issue.new_record? ? nil : 'display:none') do %>
-  <%= f.text_area :description,
+    <%= f.text_area :description,
                    :cols => 60,
                    :rows => (@issue.description.blank? ? 10 : [[10, @issue.description.length / 50].max, 100].min),
                    :accesskey => accesskey(:edit),
@@ -46,4 +45,14 @@
 </div>
 
 <%= call_hook(:view_issues_form_details_bottom, { :issue => @issue, :form => f }) %>
+<% end %>
+
+<% heads_for_wiki_formatter %>
+
+<%= javascript_tag do %>
+$(document).ready(function(){
+  $("#issue_tracker_id, #issue_status_id").each(function(){
+    $(this).val($(this).find("option[selected=selected]").val());
+  });
+});
 <% end %>

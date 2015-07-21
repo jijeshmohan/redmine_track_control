@@ -14,6 +14,6 @@ module TrackControlHelper
       end
     end
     f.select :tracker_id, tracker_list, {:required => true},
-             :onchange => "updateIssueFrom('#{escape_javascript project_issue_form_path(project, :id => issue, :format => 'js')}')"
+             :onchange => "updateIssueFrom('#{escape_javascript update_issue_form_path(project, issue)}')"
   end
 end
