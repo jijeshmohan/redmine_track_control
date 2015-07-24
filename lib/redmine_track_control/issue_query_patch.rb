@@ -7,18 +7,19 @@ module RedmineTrackControl
       base.send(:include, InstanceMethods)
 
       base.class_eval do
-      unloadable # Send unloadable so it will not be unloaded in development
+        unloadable # Send unloadable so it will not be unloaded in development
 
-      alias_method_chain :available_filters, :trackcontrol
+        alias_method_chain :available_filters, :trackcontrol
       end
     end
 
     module InstanceMethods
       def available_filters_with_trackcontrol
         @available_filters = available_filters_without_trackcontrol
-        delete_available_filter "tracker_id"
-        add_available_filter "tracker_id",
-        :type => :list, :name => "Tracker", :values => RedmineTrackControl::TrackerHelper.valid_trackers_list(self.project)
+        if not project.nil?
+          delete_available_filter "tracker_id"
+          add_available_filter "tracker_id", :type => :list, :name => "Tracker", :values => RedmineTrackControl::TrackerHelper.valid_trackers_list(self.project)
+        end
         @available_filters
       end
     end
