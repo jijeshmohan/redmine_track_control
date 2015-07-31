@@ -15,8 +15,10 @@ module RedmineTrackControl
     module InstanceMethods
       def store_translations
         Tracker.all.each do |t|
-          permission_key = ("permission_" + RedmineTrackControl::TrackerHelper.permission(t).to_s).to_sym
+          permission_key = ("permission_" + RedmineTrackControl::TrackerHelper.permission(t,"create").to_s).to_sym
           I18n.backend.store_translations(:en, { permission_key => l(:trackcontrol_create_tracker, t.name) })
+          permission_key = ("permission_" + RedmineTrackControl::TrackerHelper.permission(t,"show").to_s).to_sym
+          I18n.backend.store_translations(:en, { permission_key => l(:trackcontrol_show_tracker, t.name) })
         end
       end
     end

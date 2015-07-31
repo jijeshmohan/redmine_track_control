@@ -1,5 +1,6 @@
 # English strings go here for Rails i18n
 fr:
   trackcontrol_create_tracker: "Créer une demande '%{value}'"
+  trackcontrol_show_tracker: "Voir %{value} tracker"    
   notice_no_valid_trackers_available: "Aucun tracker disponible. Demander à votre Administrateur Redmine pour de l'assistance."
   trackcontrol_tracker_not_allowed: "Tracker non autorisé"
