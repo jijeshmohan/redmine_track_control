@@ -1,0 +1,8 @@
+# English strings go here for Rails i18n
+de:
+  trackcontrol_create_tracker: "Tracker %{value} erstellen"
+  trackcontrol_show_tracker: "Tracker %{value} anzeigen"
+  notice_no_valid_trackers_available: "Kein gültiger Tracker vorhanden. Bitte wenden Sie sich an den Administrator."
+  trackcontrol_tracker_not_allowed: "nicht zulässig"
+  error_no_tracker_in_project: "Keinen gültigen Tracker gefunden!"
+  

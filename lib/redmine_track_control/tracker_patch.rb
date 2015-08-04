@@ -20,11 +20,15 @@ module RedmineTrackControl
 
     module InstanceMethods
       private
+      
       def add_tracker_permission
-        RedmineTrackControl::TrackerHelper.add_tracker_permission(self)
+        RedmineTrackControl::TrackerHelper.add_tracker_permission(self,"create")
+        RedmineTrackControl::TrackerHelper.add_tracker_permission(self,"show")
       end
+      
       def remove_tracker_permission
-        RedmineTrackControl::TrackerHelper.remove_tracker_permission(self)
+        RedmineTrackControl::TrackerHelper.remove_tracker_permission(self,"create")
+        RedmineTrackControl::TrackerHelper.remove_tracker_permission(self,"show")
       end
     end
   end

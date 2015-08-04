@@ -1,5 +1,7 @@
 # English strings go here for Rails i18n
 en:
   trackcontrol_create_tracker: "Create %{value} tracker"
+  trackcontrol_show_tracker: "Show %{value} tracker"  
   notice_no_valid_trackers_available: "No valid trackers available. Please ask a Redmine administrator for assistance."
   trackcontrol_tracker_not_allowed: "not allowed"
+  error_no_tracker_in_project: "No valid tracker found!"

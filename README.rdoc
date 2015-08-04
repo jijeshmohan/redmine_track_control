@@ -5,6 +5,7 @@ Plugin for controlling tracker wise issue creation
 ==Features
 
 * Role based permission for creating issue with specific Tracker
+* Role based permission to view issues
 * Project Module to enable/disable tracker permission
 * Projects which are not enabled tracker control module , will work normally
 
